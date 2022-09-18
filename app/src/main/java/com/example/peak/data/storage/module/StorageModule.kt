@@ -1,8 +1,9 @@
-package com.example.peak.data.module
+package com.example.peak.data.storage.module
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
-import com.example.peak.data.PeakDatabase
+import com.example.peak.data.storage.PeakDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DatabaseModule {
+class StorageModule {
 
     @Provides
     fun provideRectangleDao(appDatabase: PeakDatabase) = appDatabase.getRectangleDao()
@@ -30,4 +31,10 @@ class DatabaseModule {
             PeakDatabase::class.java,
             "peak-db"
         ).build()
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext applicationContext: Context): SharedPreferences =
+        applicationContext.getSharedPreferences("Peak-pref", Context.MODE_PRIVATE)
+
 }

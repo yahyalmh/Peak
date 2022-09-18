@@ -1,4 +1,4 @@
-package com.example.peak.data
+package com.example.peak.data.storage
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -18,7 +18,7 @@ interface RectangleDao {
     fun getAll(): List<RectangleEntity>
 
     @Insert(onConflict = REPLACE)
-    fun insertAll(vararg rectangles: RectangleEntity)
+    fun insertAll(rectangles : List<RectangleEntity>)
 
     @Update
     fun update(rectangleEntity: RectangleEntity)

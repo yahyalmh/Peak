@@ -1,4 +1,4 @@
-package com.example.peak.data
+package com.example.peak.data.storage
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
