@@ -3,9 +3,10 @@ package com.example.peak.data
 import android.content.SharedPreferences
 import com.example.peak.data.network.PeakApi
 import com.example.peak.data.storage.RectangleDao
+import com.example.peak.data.storage.RectangleEntity
 import com.example.peak.data.storage.SharedKey
 import com.example.peak.data.storage.toEntity
-import com.example.peak.presentation.uitl.TimeExtension.Companion.diffDays
+import com.example.peak.presentation.uitl.TimeExtension.diffDays
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -63,4 +64,8 @@ class RectangleRepository @Inject constructor(
                 .putLong(SharedKey.LAST_UPDATE_DATE_KEY, today.time)
                 .apply()
         }
+
+    suspend fun updateRectangle(rectangleEntity: RectangleEntity) {
+        rectangleDao.update(rectangleEntity)
+    }
 }
