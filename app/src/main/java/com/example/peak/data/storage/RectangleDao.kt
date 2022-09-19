@@ -15,12 +15,12 @@ import androidx.room.Update
 interface RectangleDao {
 
     @Query("SELECT * FROM rectangles")
-    fun getAll(): List<RectangleEntity>
+    suspend fun getAll(): List<RectangleEntity>
 
     @Insert(onConflict = REPLACE)
-    fun insertAll(rectangles : List<RectangleEntity>)
+    suspend fun insertAll(rectangles : List<RectangleEntity>)
 
     @Update
-    fun update(rectangleEntity: RectangleEntity)
+    suspend fun update(rectangleEntity: RectangleEntity)
 
 }
