@@ -1,9 +1,11 @@
 package com.example.peak.data.storage
 
+import android.graphics.Color
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.peak.data.network.Rectangle
+import kotlin.random.Random
 
 /**
  * @author yaya (@yahyalmh)
@@ -16,11 +18,13 @@ data class RectangleEntity(
     @ColumnInfo val x: Float,
     @ColumnInfo val y: Float,
     @ColumnInfo val size: Float,
+    @ColumnInfo val color: Int,
 )
 
 fun Rectangle.toEntity() = RectangleEntity(
     id = rectangleId.toInt(),
     x = x.toFloat(),
     y = y.toFloat(),
-    size = size.toFloat()
+    size = size.toFloat(),
+    color = Color.rgb(180, Random.nextInt(256), Random.nextInt(256)),
 )

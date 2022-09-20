@@ -3,13 +3,11 @@ package com.example.peak.presentation.ui.component
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.MotionEvent
 import android.view.View
 import com.example.peak.data.storage.RectangleEntity
 import com.example.peak.presentation.uitl.setScale
-import kotlin.random.Random
 
 
 /**
@@ -31,7 +29,7 @@ class RectangleView(
     init {
         background = GradientDrawable().apply {
             cornerRadius = 20f
-            color = ColorStateList.valueOf(Color.rgb(180, Random.nextInt(256), Random.nextInt(256)))
+            color = ColorStateList.valueOf(rectangle.color)
         }
 
         setOnTouchListener { _, event ->
