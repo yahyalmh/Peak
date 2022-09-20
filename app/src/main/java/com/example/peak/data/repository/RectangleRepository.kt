@@ -1,4 +1,4 @@
-package com.example.peak.data
+package com.example.peak.data.repository
 
 import android.content.SharedPreferences
 import com.example.peak.data.network.PeakApi

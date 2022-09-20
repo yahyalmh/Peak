@@ -3,16 +3,15 @@ package com.example.peak.presentation.ui
 import android.os.Bundle
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.example.peak.R
+import com.example.peak.data.DataState
 import com.example.peak.data.storage.RectangleEntity
 import com.example.peak.databinding.FragmentRectangleBinding
-import com.example.peak.presentation.UiState
 import com.example.peak.presentation.ui.component.RectangleView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +30,10 @@ class RectangleFragment : Fragment(R.layout.fragment_rectangle) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentRectangleBinding.bind(view)
+        binding = FragmentRectangleBinding.bind(view).apply {
+            viewModel = this@RectangleFragment.viewModel
+            lifecycleOwner = this@RectangleFragment.viewLifecycleOwner
+        }
 
         observeRectangles()
     }
@@ -41,24 +43,21 @@ class RectangleFragment : Fragment(R.layout.fragment_rectangle) {
             viewModel
                 .rectangles
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { uiState ->
-                    when (uiState) {
-                        is UiState.Success -> {
-                            binding.loading.isVisible = false
-                            handelData(uiState.data)
+                .collect { state ->
+                    when (state) {
+                        is DataState.Success<*> -> {
+                            handelData(state.data as? List<RectangleEntity>?)
                         }
-                        is UiState.Error -> {
-                            binding.loading.isVisible = false
-                            handelError(uiState.message)
+                        is DataState.Error -> {
+                            handelError(state.message)
                         }
-                        is UiState.Loading -> binding.loading.isVisible = true
                     }
                 }
         }
     }
 
-    private fun handelData(data: List<RectangleEntity>) =
-        data.forEach {
+    private fun handelData(data: List<RectangleEntity>?) =
+        data?.forEach {
             addChildView(it)
         }
 
@@ -70,11 +69,11 @@ class RectangleFragment : Fragment(R.layout.fragment_rectangle) {
             id = View.generateViewId()
         }
 
-        binding.root.addView(rectangleView)
-        binding.root.run {
+        binding.container.addView(rectangleView)
+        binding.container.run {
             val constraintSet = ConstraintSet()
             constraintSet.apply {
-                clone(binding.root)
+                clone(binding.container)
                 connect(
                     rectangleView.id,
                     ConstraintSet.START,
@@ -107,9 +106,9 @@ class RectangleFragment : Fragment(R.layout.fragment_rectangle) {
 
     private fun handelError(message: String) {
         MaterialAlertDialogBuilder(requireActivity())
-            .setTitle("Warning")
+            .setTitle(R.string.error)
             .setMessage(message)
-            .setPositiveButton("OK", null)
+            .setPositiveButton(R.string.ok, null)
             .show()
     }
 }
