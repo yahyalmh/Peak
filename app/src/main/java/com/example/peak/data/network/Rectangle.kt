@@ -8,13 +8,9 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class Rectangle(
-    @SerializedName("rectangleId")
     val rectangleId: String,
-    @SerializedName("x")
     val x: String,
-    @SerializedName("y")
     val y: String,
-    @SerializedName("size")
     val size: String,
 )
 
