@@ -3,11 +3,13 @@ package com.example.peak.presentation.ui.component
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.MotionEvent
 import android.view.View
 import com.example.peak.data.storage.RectangleEntity
 import com.example.peak.presentation.uitl.setScale
+import kotlin.random.Random
 
 
 /**
@@ -25,13 +27,17 @@ class RectangleView(
     private var yDown: Float = 0f
     private var windowWidth: Int = 0
     private var windowHeight: Int = 0
+    private var rectangleColor: Int = 0
 
     init {
-        background = GradientDrawable().apply {
-            cornerRadius = 20f
-            color = ColorStateList.valueOf(rectangle.color)
-        }
+        rectangleColor = rectangle.color ?: getRandomColor()
 
+        setBackground()
+
+        setTouchListener()
+    }
+
+    private fun setTouchListener() {
         setOnTouchListener { _, event ->
             when (event.actionMasked) {
 
@@ -51,10 +57,28 @@ class RectangleView(
                 MotionEvent.ACTION_UP -> {
                     val biasX = (x / (windowWidth - width)).setScale(3)
                     val biasY = (y / (windowHeight - height)).setScale(3)
-                    oncPositionChangeListener(rectangle.copy(x = biasX, y = biasY))
+
+                    saveRectangle(biasX, biasY)
                 }
             }
             true
+        }
+    }
+
+    private fun saveRectangle(biasX: Float, biasY: Float) {
+        oncPositionChangeListener(
+            rectangle.copy(
+                x = biasX,
+                y = biasY,
+                color = rectangleColor
+            )
+        )
+    }
+
+    private fun setBackground() {
+        background = GradientDrawable().apply {
+            cornerRadius = 20f
+            color = ColorStateList.valueOf(rectangleColor)
         }
     }
 
@@ -68,4 +92,9 @@ class RectangleView(
             windowHeight.times(rectangle.size).toInt()
         )
     }
+
+    private fun getRandomColor(): Int {
+        return Color.rgb(180, Random.nextInt(256), Random.nextInt(256))
+    }
+
 }

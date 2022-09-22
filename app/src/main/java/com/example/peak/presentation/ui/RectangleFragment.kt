@@ -9,11 +9,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.example.peak.R
-import com.example.peak.data.DataState
 import com.example.peak.data.storage.RectangleEntity
 import com.example.peak.databinding.FragmentRectangleBinding
 import com.example.peak.presentation.ui.component.RectangleView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,35 +30,21 @@ class RectangleFragment : Fragment(R.layout.fragment_rectangle) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentRectangleBinding.bind(view).apply {
             viewModel = this@RectangleFragment.viewModel
+            fragment = this@RectangleFragment
             lifecycleOwner = this@RectangleFragment.viewLifecycleOwner
         }
 
         observeRectangles()
     }
 
-    private fun observeRectangles() {
+    fun observeRectangles() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel
                 .rectangles
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { state ->
-                    when (state) {
-                        is DataState.Success<*> -> {
-                            handelData(state.data as? List<RectangleEntity>?)
-                        }
-                        is DataState.Error -> {
-                            handelError(state.message)
-                        }
-                    }
-                }
+                .collect { rectangles -> rectangles.forEach { addChildView(it) } }
         }
     }
-
-    private fun handelData(data: List<RectangleEntity>?) =
-        data?.forEach {
-            addChildView(it)
-        }
-
 
     private fun addChildView(rectangleEntity: RectangleEntity) {
         val rectangleView = RectangleView(requireActivity(), rectangleEntity) { rectangle ->
@@ -102,13 +86,5 @@ class RectangleFragment : Fragment(R.layout.fragment_rectangle) {
                 setVerticalBias(rectangleView.id, rectangleEntity.y)
             }.applyTo(this)
         }
-    }
-
-    private fun handelError(message: String) {
-        MaterialAlertDialogBuilder(requireActivity())
-            .setTitle(R.string.error)
-            .setMessage(message)
-            .setPositiveButton(R.string.ok, null)
-            .show()
     }
 }

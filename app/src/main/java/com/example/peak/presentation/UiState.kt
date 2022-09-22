@@ -8,5 +8,5 @@ package com.example.peak.presentation
 sealed class UiState {
     object Loading : UiState()
     object Loaded : UiState()
-    object Error : UiState()
+    data class Error(val message: String) : UiState()
 }

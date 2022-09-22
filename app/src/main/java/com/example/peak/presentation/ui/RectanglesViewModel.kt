@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.peak.data.repository.RectangleRepository
 import com.example.peak.data.storage.RectangleEntity
-import com.example.peak.data.DataState
 import com.example.peak.presentation.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -29,7 +28,7 @@ class RectanglesViewModel @Inject constructor(private val rectangleRepository: R
 
     private val retryCount: Long = 3
 
-    val rectangles: Flow<DataState> = flow {
+    val rectangles: Flow<List<RectangleEntity>> = flow {
         rectangleRepository.getRectangles()
             .retry(retryCount) { e ->
                 // retry on any IOException but also introduce delay if retrying
@@ -39,16 +38,12 @@ class RectanglesViewModel @Inject constructor(private val rectangleRepository: R
                 _uiSate.value = UiState.Loading
             }
             .catch { exception ->
-                _uiSate.value = UiState.Error
-                emit(
-                    DataState.Error(
-                        exception.message ?: "Exception while fetching data"
-                    )
-                )
+                val errorMessage = exception.message ?: "Exception while fetching data"
+                _uiSate.value = UiState.Error(errorMessage)
             }
             .collect { rectangles ->
                 _uiSate.value = UiState.Loaded
-                emit(DataState.Success(rectangles))
+                emit(rectangles)
             }
     }
 

@@ -18,7 +18,7 @@ data class RectangleEntity(
     @ColumnInfo val x: Float,
     @ColumnInfo val y: Float,
     @ColumnInfo val size: Float,
-    @ColumnInfo val color: Int,
+    @ColumnInfo val color: Int? = null,
 )
 
 fun Rectangle.toEntity() = RectangleEntity(
@@ -26,5 +26,4 @@ fun Rectangle.toEntity() = RectangleEntity(
     x = x.toFloat(),
     y = y.toFloat(),
     size = size.toFloat(),
-    color = Color.rgb(180, Random.nextInt(256), Random.nextInt(256)),
 )
