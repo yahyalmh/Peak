@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -52,7 +53,13 @@ dependencies {
     //noinspection GradleDependency
     testImplementation "junit:junit:$rootProject.junit_version"
     androidTestImplementation "androidx.test.ext:junit:$rootProject.junit_ext_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$rootProject.junit5_version"
+    testImplementation "org.junit.jupiter:junit-jupiter:$rootProject.junit5_version"
 
+    //Mockito
+    testImplementation "org.mockito:mockito-core:$rootProject.mockito_version"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$rootProject.mockito_kotlin_version"
+    testImplementation "org.mockito:mockito-inline:$rootProject.mockito_version"
     // Espresso
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espresso_version"
 
@@ -81,14 +88,15 @@ dependencies {
     // coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines_version"
-    implementation "androidx.fragment:fragment-ktx:$rootProject.fragment_ktx_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutines_version"
 
+    implementation "androidx.fragment:fragment-ktx:$rootProject.fragment_ktx_version"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$rootProject.lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$rootProject.lifecycle_version"
-    // Lifecycles only (without ViewModel or LiveData
+    // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common:$rootProject.lifecycle_version"
