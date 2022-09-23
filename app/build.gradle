@@ -53,8 +53,10 @@ dependencies {
     //noinspection GradleDependency
     testImplementation "junit:junit:$rootProject.junit_version"
     androidTestImplementation "androidx.test.ext:junit:$rootProject.junit_ext_version"
+    implementation "androidx.test.ext:junit-ktx:$rootProject.junit_ext_version"
     testImplementation "org.junit.jupiter:junit-jupiter-api:$rootProject.junit5_version"
     testImplementation "org.junit.jupiter:junit-jupiter:$rootProject.junit5_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$rootProject.junit5_version"
 
     //Mockito
     testImplementation "org.mockito:mockito-core:$rootProject.mockito_version"
@@ -103,14 +105,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycle_version"
 
-    // Annotation processor
-//    kapt("androidx.lifecycle:lifecycle-compiler:$rootProject.lifecycle_version"
     // alternately - if using Java8, use the following instead of lifecycle-compiler
     implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycle_version"
 
     // optional - Test helpers for LiveData
     testImplementation "androidx.arch.core:core-testing:$rootProject.test_liveData_version"
-
 
     // Saved state module for ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$rootProject.lifecycle_version"
