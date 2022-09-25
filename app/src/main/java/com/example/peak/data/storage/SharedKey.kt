@@ -6,5 +6,6 @@ package com.example.peak.data.storage
  */
 
 object SharedKey {
+    const val SHARED_FILE_NAME = "Peak-pref"
     const val LAST_UPDATE_DATE_KEY = "LAST_UPDATE_DATE"
 }

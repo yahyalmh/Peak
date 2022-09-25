@@ -15,7 +15,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -24,6 +24,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -64,20 +72,29 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:$rootProject.mockito_version"
     // Espresso
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espresso_contrib_version"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$rootProject.espresso_version"
+    implementation "androidx.test.espresso:espresso-idling-resource:$rootProject.espresso_version"
+
+    // WireMock
+    androidTestImplementation("com.github.tomakehurst:wiremock:$rootProject.wiremock_version") {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'asm', module: 'asm'
+        exclude group: 'org.json', module: 'json'
+    }
+    androidTestImplementation "org.apache.httpcomponents:httpclient-android:$rootProject.httpclient_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.loging_interceptor_version"
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$rootProject.hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$rootProject.hilt_version"
-
 
     // Room
     implementation "androidx.room:room-runtime:$rootProject.room_version"
     annotationProcessor "androidx.room:room-compiler:$rootProject.room_version"
     // To use Kotlin annotation processing tool (kapt
     kapt "androidx.room:room-compiler:$rootProject.room_version"
-    // To use Kotlin Symbol Processing (KSP
-    //    ksp("androidx.room:room-compiler:$rootProject.room_version"
-    // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$rootProject.room_version"
     // Room test helpers
     testImplementation "androidx.room:room-testing:$rootProject.room_version"
@@ -85,7 +102,7 @@ dependencies {
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_version"
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation "com.google.code.gson:gson:$rootProject.gson_version"
 
     // coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
@@ -110,8 +127,4 @@ dependencies {
 
     // optional - Test helpers for LiveData
     testImplementation "androidx.arch.core:core-testing:$rootProject.test_liveData_version"
-
-    // Saved state module for ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$rootProject.lifecycle_version"
-
 }

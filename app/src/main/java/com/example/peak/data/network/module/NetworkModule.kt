@@ -1,11 +1,13 @@
 package com.example.peak.data.network.module
 
+import com.example.peak.BuildConfig
 import com.example.peak.data.network.PeakApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -20,8 +22,15 @@ import javax.inject.Singleton
 class NetworkModule {
 
     @Provides
-    @Singleton
-    fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
+    fun provideHttpClient(): OkHttpClient {
+        val builder = OkHttpClient.Builder()
+        if (BuildConfig.DEBUG) {
+            val logging = HttpLoggingInterceptor()
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+            builder.addInterceptor(logging)
+        }
+        return builder.build()
+    }
 
     @Provides
     @Singleton
@@ -39,6 +48,6 @@ class NetworkModule {
 
 
     companion object {
-        const val BASE_URL = "http://10.0.2.2:5000"
+        var BASE_URL = "http://10.0.2.2:5000"
     }
 }

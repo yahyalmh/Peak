@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.peak.data.storage.PeakDatabase
+import com.example.peak.data.storage.SharedKey
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,16 +26,20 @@ class StorageModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext applicationContext: Context) =
-        Room.databaseBuilder(
+    fun provideDatabase(@ApplicationContext applicationContext: Context): PeakDatabase {
+        return Room.databaseBuilder(
             applicationContext,
             PeakDatabase::class.java,
-            "peak-db"
+            DATABASE_NAME
         ).build()
+    }
 
     @Provides
     @Singleton
     fun provideSharedPreferences(@ApplicationContext applicationContext: Context): SharedPreferences =
-        applicationContext.getSharedPreferences("Peak-pref", Context.MODE_PRIVATE)
+        applicationContext.getSharedPreferences(SharedKey.SHARED_FILE_NAME, Context.MODE_PRIVATE)
 
+    companion object {
+        const val DATABASE_NAME = "peak-db"
+    }
 }
